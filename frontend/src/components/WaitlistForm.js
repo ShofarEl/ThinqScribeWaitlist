@@ -130,35 +130,35 @@ const WaitlistForm = ({ onSuccess, onError }) => {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="card animate-slide-up">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+      <div className="card shadow-lg border border-thinq-blue-200 animate-slide-up">
+        <div className="text-center mb-5">
+          <h2 className="text-xl sm:text-2xl font-bold text-thinq-blue-600 mb-2">
             Join the Waitlist
           </h2>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             Be the first to experience ThinqScribe when we launch
           </p>
           
           {/* API Status Indicator */}
           {apiStatus === 'checking' && (
-            <div className="mt-2 text-sm text-blue-600">
+            <div className="mt-2 text-xs sm:text-sm text-thinq-blue-500">
               <div className="inline-flex items-center">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-thinq-blue-500 mr-2"></div>
                 Checking connection...
               </div>
             </div>
           )}
           
           {apiStatus === 'disconnected' && (
-            <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded">
+            <div className="mt-2 text-xs sm:text-sm text-red-600 bg-red-50 p-2 rounded">
               ⚠️ Backend server not available. Form will not work.
             </div>
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <div>
-            <label htmlFor="firstName" className="label">
+            <label htmlFor="firstName" className="label text-xs sm:text-sm">
               First Name
             </label>
             <input
@@ -167,17 +167,17 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               name="firstName"
               value={formData.firstName}
               onChange={handleInputChange}
-              className={`input-field ${errors.firstName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
+              className={`input-field text-sm ${errors.firstName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
               placeholder="Enter your first name"
               disabled={loading || apiStatus === 'disconnected'}
             />
             {errors.firstName && (
-              <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.firstName}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="lastName" className="label">
+            <label htmlFor="lastName" className="label text-xs sm:text-sm">
               Last Name
             </label>
             <input
@@ -186,17 +186,17 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
-              className={`input-field ${errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
+              className={`input-field text-sm ${errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
               placeholder="Enter your last name"
               disabled={loading || apiStatus === 'disconnected'}
             />
             {errors.lastName && (
-              <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.lastName}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="email" className="label">
+            <label htmlFor="email" className="label text-xs sm:text-sm">
               Email Address
             </label>
             <input
@@ -205,17 +205,17 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className={`input-field ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
+              className={`input-field text-sm ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
               placeholder="Enter your email address"
               disabled={loading || apiStatus === 'disconnected'}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.email}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="status" className="label">
+            <label htmlFor="status" className="label text-xs sm:text-sm">
               I am a...
             </label>
             <select
@@ -223,7 +223,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               name="status"
               value={formData.status}
               onChange={handleInputChange}
-              className={`input-field ${errors.status ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
+              className={`input-field text-sm ${errors.status ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
               disabled={loading || apiStatus === 'disconnected'}
             >
               {statusOptions.map(option => (
@@ -233,19 +233,19 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               ))}
             </select>
             {errors.status && (
-              <p className="text-red-500 text-sm mt-1">{errors.status}</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.status}</p>
             )}
           </div>
 
           <button
             type="submit"
             disabled={loading || apiStatus === 'disconnected'}
-            className={`w-full btn-primary ${(loading || apiStatus === 'disconnected') ? 'opacity-75 cursor-not-allowed' : ''}`}
+            className={`w-full btn-primary text-sm sm:text-base py-2 sm:py-3 ${(loading || apiStatus === 'disconnected') ? 'opacity-75 cursor-not-allowed' : ''}`}
           >
             {loading ? (
               <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                Joining Waitlist...
+                <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white mr-2"></div>
+                <span className="text-sm">Joining Waitlist...</span>
               </div>
             ) : (
               'Join Waitlist'

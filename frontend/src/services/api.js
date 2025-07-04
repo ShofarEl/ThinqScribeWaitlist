@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Use local development URL for now, will be overridden in production
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Use environment variable for API URL with production fallback
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://thinqscribewaitlist.onrender.com/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -15,8 +15,11 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    console.log(`Making ${config.method?.toUpperCase()} request to ${config.url}`);
-    console.log('Full URL:', `${config.baseURL}${config.url}`);
+    // Only log in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Making ${config.method?.toUpperCase()} request to ${config.url}`);
+      console.log('Full URL:', `${config.baseURL}${config.url}`);
+    }
     return config;
   },
   (error) => {
@@ -28,31 +31,37 @@ api.interceptors.request.use(
 // Response interceptor
 api.interceptors.response.use(
   (response) => {
-    console.log('Response received:', response.status, response.data);
+    // Only log in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Response received:', response.status, response.data);
+    }
     return response;
   },
   (error) => {
     console.error('Response error:', error);
-    console.error('Error details:', {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      config: {
-        url: error.config?.url,
-        method: error.config?.method,
-        baseURL: error.config?.baseURL
-      }
-    });
     
-    if (error.response?.status === 404) {
-      console.error('Endpoint not found - check if backend is running');
-    } else if (error.response?.status >= 500) {
-      console.error('Server error - check backend logs');
-    } else if (error.code === 'ECONNREFUSED') {
-      console.error('Connection refused - backend server not running');
-    } else if (error.code === 'NETWORK_ERROR') {
-      console.error('Network error - check internet connection');
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error details:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          baseURL: error.config?.baseURL
+        }
+      });
+      
+      if (error.response?.status === 404) {
+        console.error('Endpoint not found - check if backend is running');
+      } else if (error.response?.status >= 500) {
+        console.error('Server error - check backend logs');
+      } else if (error.code === 'ECONNREFUSED') {
+        console.error('Connection refused - backend server not running');
+      } else if (error.code === 'NETWORK_ERROR') {
+        console.error('Network error - check internet connection');
+      }
     }
     
     return Promise.reject(error);
@@ -64,7 +73,6 @@ export const waitlistAPI = {
   // Add new entry to waitlist
   addEntry: async (entryData) => {
     try {
-      console.log('Submitting waitlist entry:', entryData);
       const response = await api.post('/waitlist', entryData);
       return response.data;
     } catch (error) {

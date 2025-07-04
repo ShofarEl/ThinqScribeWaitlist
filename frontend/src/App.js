@@ -51,14 +51,10 @@ const ErrorMessage = ({ message, onClose }) => (
 const Header = () => {
   return (
     <header className="relative">
-      <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto">
+      <nav className="flex items-center justify-between p-4 sm:p-6 max-w-7xl mx-auto">
         <div className="flex items-center space-x-2">
-          <div className="flex space-x-1">
-            <div className="w-2 h-2 bg-white rounded-full opacity-60"></div>
-            <div className="w-2 h-2 bg-white rounded-full opacity-80"></div>
-            <div className="w-2 h-2 bg-white rounded-full"></div>
-          </div>
-          <span className="text-white font-bold text-xl ml-4">ThinqScribe</span>
+          <img src="/App-Icon-Light.png" alt="ThinqScribe Logo" className="w-8 h-8 sm:w-10 sm:h-10" />
+          <span className="text-white font-bold text-lg sm:text-xl ml-2">ThinqScribe</span>
         </div>
         
         <div className="flex items-center space-x-1">
@@ -91,18 +87,18 @@ function App() {
     <div className="min-h-screen bg-thinq-gradient flex flex-col">
       <Header />
       
-      <main className="flex-1 flex items-center justify-center p-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <main className="flex-1 flex items-center justify-center p-4 sm:p-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left side - Hero content */}
           <div className="text-center lg:text-left">
-            <h1 className="text-display-xl font-display text-white mb-6 animate-fade-in">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-display-xl font-display text-white mb-4 sm:mb-6 animate-fade-in">
               FOR<br />
-              YOU<span className="text-4xl">...</span>
+              YOU<span className="text-2xl sm:text-4xl">...</span>
             </h1>
-            <h2 className="text-2xl lg:text-3xl font-semibold text-white mb-8 animate-fade-in">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white mb-4 sm:mb-8 animate-fade-in">
               ThinqScribe Is For You If...
             </h2>
-            <div className="space-y-4 text-lg text-white opacity-90 animate-slide-up">
+            <div className="space-y-3 sm:space-y-4 text-sm sm:text-base md:text-lg text-white opacity-90 animate-slide-up">
               <p>You are an undergraduate or postgraduate student who loves to produce confident and quality academic work</p>
               <p>You want to streamline your research and writing process</p>
               <p>You need AI-powered assistance for academic excellence</p>
@@ -117,11 +113,11 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="text-center py-6">
+      <footer className="text-center py-4 sm:py-6">
         <div className="flex items-center justify-center space-x-2 text-white">
-          <span className="font-semibold">ThinqScribe</span>
-          <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+          <span className="font-semibold text-sm sm:text-base">ThinqScribe</span>
+          <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white flex items-center justify-center">
+            <svg className="w-2 h-2 sm:w-3 sm:h-3" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           </div>

@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "build",
+  "framework": "create-react-app",
+  "regions": ["cdg1"],
+  "env": {
+    "REACT_APP_API_URL": "https://thinqscribewaitlist.onrender.com/api"
+  }
+} 

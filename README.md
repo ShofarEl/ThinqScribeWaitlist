@@ -226,3 +226,101 @@ For additional help, please open an issue in the repository.
 ---
 
 **Built with ❤️ using the MERN stack and TailwindCSS**
+
+# ThinqScribe Waitlist
+
+This repository contains the code for the ThinqScribe waitlist landing page and backend API.
+
+## Project Structure
+
+- `frontend/` - React application for the waitlist form
+- `backend/` - Node.js API for handling waitlist submissions
+
+## Deployment Instructions
+
+### Frontend (Vercel)
+
+1. **Sign up/Log in to Vercel**
+   - Go to [vercel.com](https://vercel.com) and create an account or log in
+
+2. **Connect your GitHub repository**
+   - Import your repository from GitHub
+   - Select the repository containing this code
+
+3. **Configure project settings**
+   - Framework preset: Create React App
+   - Root directory: `frontend`
+   - Build command: `npm run build`
+   - Output directory: `build`
+
+4. **Set environment variables**
+   - Add the following environment variable:
+     ```
+     REACT_APP_API_URL=https://thinqscribewaitlist.onrender.com/api
+     ```
+
+5. **Deploy**
+   - Click "Deploy" to start the deployment process
+   - Vercel will build and deploy your frontend
+
+6. **Set up custom domain**
+   - Go to Project Settings > Domains
+   - Add your domain: `thinqscribe.com`
+   - Configure the domain to serve the waitlist at the `/waitlist` path
+
+### Backend (Render)
+
+1. **Sign up/Log in to Render**
+   - Go to [render.com](https://render.com) and create an account or log in
+
+2. **Connect your GitHub repository**
+   - Click "New" and select "Web Service"
+   - Connect your GitHub repository
+
+3. **Configure the service**
+   - Name: `thinqscribe-waitlist-api`
+   - Environment: `Node`
+   - Build Command: `cd backend && npm install`
+   - Start Command: `cd backend && npm start`
+
+4. **Set environment variables**
+   - Add the following environment variables:
+     ```
+     NODE_ENV=production
+     CORS_ORIGIN=https://thinqscribe.com
+     MONGODB_URI=your_mongodb_connection_string
+     JWT_SECRET=your_secure_jwt_secret
+     ```
+
+5. **Deploy**
+   - Click "Create Web Service" to deploy your backend
+
+## Development Setup
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+## Testing the Deployment
+
+1. Visit `https://thinqscribe.com/waitlist` to see the waitlist form
+2. Fill out the form to test the submission process
+3. Check your MongoDB database to confirm the entry was saved
+
+## Notes
+
+- The frontend is configured to use the production API URL by default
+- The backend is configured to accept requests from the production domain
+- CORS is configured to allow requests from both the production domain and development environments

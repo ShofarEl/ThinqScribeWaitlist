@@ -28,7 +28,7 @@ services:
     staticPublishPath: frontend/build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://thinqscribe-waitlist-api.onrender.com/api
+        value: https://thinqscribewaitlist.onrender.com/api
     routes:
       - type: rewrite
         source: /waitlist/*

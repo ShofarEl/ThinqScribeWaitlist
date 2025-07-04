@@ -8,7 +8,14 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: [config.CORS_ORIGIN, 'http://localhost:3000', 'http://localhost:3001'],
+  origin: [
+    config.CORS_ORIGIN,
+    'https://thinqscribe.com',
+    'https://thinqscribe.vercel.app',
+    /\.thinqscribe\.vercel\.app$/,
+    'http://localhost:3000',
+    'http://localhost:3001'
+  ],
   credentials: true
 }));
 
