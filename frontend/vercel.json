@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
+  "installCommand": "npm install",
   "buildCommand": "chmod +x build.sh && ./build.sh",
   "outputDirectory": "build",
   "env": {
