@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { waitlistAPI } from '../services/api';
 
 const WaitlistForm = ({ onSuccess, onError }) => {
@@ -10,6 +10,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [apiStatus, setApiStatus] = useState('checking');
 
   const statusOptions = [
     { value: 'student', label: 'Student' },
@@ -18,6 +19,21 @@ const WaitlistForm = ({ onSuccess, onError }) => {
     { value: 'researcher', label: 'Researcher' },
     { value: 'other', label: 'Other' }
   ];
+
+  // Test API connection on component mount
+  useEffect(() => {
+    const testConnection = async () => {
+      try {
+        await waitlistAPI.healthCheck();
+        setApiStatus('connected');
+      } catch (error) {
+        console.error('API connection test failed:', error);
+        setApiStatus('disconnected');
+      }
+    };
+    
+    testConnection();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -71,6 +87,11 @@ const WaitlistForm = ({ onSuccess, onError }) => {
       return;
     }
 
+    if (apiStatus === 'disconnected') {
+      onError('Backend server is not available. Please try again later.');
+      return;
+    }
+
     setLoading(true);
     
     try {
@@ -117,6 +138,22 @@ const WaitlistForm = ({ onSuccess, onError }) => {
           <p className="text-gray-600">
             Be the first to experience ThinqScribe when we launch
           </p>
+          
+          {/* API Status Indicator */}
+          {apiStatus === 'checking' && (
+            <div className="mt-2 text-sm text-blue-600">
+              <div className="inline-flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                Checking connection...
+              </div>
+            </div>
+          )}
+          
+          {apiStatus === 'disconnected' && (
+            <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded">
+              ⚠️ Backend server not available. Form will not work.
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -132,7 +169,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               onChange={handleInputChange}
               className={`input-field ${errors.firstName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
               placeholder="Enter your first name"
-              disabled={loading}
+              disabled={loading || apiStatus === 'disconnected'}
             />
             {errors.firstName && (
               <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
@@ -151,7 +188,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               onChange={handleInputChange}
               className={`input-field ${errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
               placeholder="Enter your last name"
-              disabled={loading}
+              disabled={loading || apiStatus === 'disconnected'}
             />
             {errors.lastName && (
               <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
@@ -170,7 +207,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               onChange={handleInputChange}
               className={`input-field ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
               placeholder="Enter your email address"
-              disabled={loading}
+              disabled={loading || apiStatus === 'disconnected'}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -187,7 +224,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               value={formData.status}
               onChange={handleInputChange}
               className={`input-field ${errors.status ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
-              disabled={loading}
+              disabled={loading || apiStatus === 'disconnected'}
             >
               {statusOptions.map(option => (
                 <option key={option.value} value={option.value}>
@@ -202,8 +239,8 @@ const WaitlistForm = ({ onSuccess, onError }) => {
 
           <button
             type="submit"
-            disabled={loading}
-            className={`w-full btn-primary ${loading ? 'opacity-75 cursor-not-allowed' : ''}`}
+            disabled={loading || apiStatus === 'disconnected'}
+            className={`w-full btn-primary ${(loading || apiStatus === 'disconnected') ? 'opacity-75 cursor-not-allowed' : ''}`}
           >
             {loading ? (
               <div className="flex items-center justify-center">

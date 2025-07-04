@@ -1,57 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import WaitlistForm from './components/WaitlistForm';
-import WaitlistTable from './components/WaitlistTable';
-
-// Header component
-const Header = () => {
-  const location = useLocation();
-  
-  return (
-    <header className="relative">
-      <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto">
-        <div className="flex items-center space-x-2">
-          <div className="flex space-x-1">
-            <div className="w-2 h-2 bg-white rounded-full opacity-60"></div>
-            <div className="w-2 h-2 bg-white rounded-full opacity-80"></div>
-            <div className="w-2 h-2 bg-white rounded-full"></div>
-          </div>
-          <span className="text-white font-bold text-xl ml-4">ThinqScribe</span>
-        </div>
-        
-        <div className="flex items-center space-x-1">
-          <div className="w-2 h-2 bg-white rounded-full"></div>
-          <div className="w-2 h-2 bg-white rounded-full opacity-80"></div>
-          <div className="w-2 h-2 bg-white rounded-full opacity-60"></div>
-        </div>
-      </nav>
-
-      {/* Navigation tabs */}
-      <div className="flex justify-center space-x-1 px-6 max-w-7xl mx-auto">
-        <Link
-          to="/"
-          className={`px-6 py-2 rounded-t-lg transition-all duration-200 ${
-            location.pathname === '/'
-              ? 'bg-white text-thinq-blue-600 font-semibold'
-              : 'text-white hover:bg-white hover:bg-opacity-20'
-          }`}
-        >
-          Join Waitlist
-        </Link>
-        <Link
-          to="/admin"
-          className={`px-6 py-2 rounded-t-lg transition-all duration-200 ${
-            location.pathname === '/admin'
-              ? 'bg-white text-thinq-blue-600 font-semibold'
-              : 'text-white hover:bg-white hover:bg-opacity-20'
-          }`}
-        >
-          Admin View
-        </Link>
-      </div>
-    </header>
-  );
-};
 
 // Success message component
 const SuccessMessage = ({ message, onClose }) => (
@@ -99,8 +47,32 @@ const ErrorMessage = ({ message, onClose }) => (
   </div>
 );
 
-// Home page component
-const HomePage = () => {
+// Header component
+const Header = () => {
+  return (
+    <header className="relative">
+      <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto">
+        <div className="flex items-center space-x-2">
+          <div className="flex space-x-1">
+            <div className="w-2 h-2 bg-white rounded-full opacity-60"></div>
+            <div className="w-2 h-2 bg-white rounded-full opacity-80"></div>
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+          </div>
+          <span className="text-white font-bold text-xl ml-4">ThinqScribe</span>
+        </div>
+        
+        <div className="flex items-center space-x-1">
+          <div className="w-2 h-2 bg-white rounded-full"></div>
+          <div className="w-2 h-2 bg-white rounded-full opacity-80"></div>
+          <div className="w-2 h-2 bg-white rounded-full opacity-60"></div>
+        </div>
+      </nav>
+    </header>
+  );
+};
+
+// Main App component
+function App() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState('');
@@ -171,44 +143,6 @@ const HomePage = () => {
         />
       )}
     </div>
-  );
-};
-
-// Admin page component
-const AdminPage = () => {
-  return (
-    <div className="min-h-screen bg-thinq-gradient">
-      <Header />
-      
-      <main className="p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-white mb-4">
-              Waitlist Dashboard
-            </h1>
-            <p className="text-white opacity-90">
-              Manage and view all waitlist entries
-            </p>
-          </div>
-          
-          <WaitlistTable />
-        </div>
-      </main>
-    </div>
-  );
-};
-
-// Main App component
-function App() {
-  return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/admin" element={<AdminPage />} />
-        </Routes>
-      </div>
-    </Router>
   );
 }
 

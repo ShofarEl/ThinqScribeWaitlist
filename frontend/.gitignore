@@ -1,0 +1,16 @@
+# Logs
+*.log
+*.log.*
+
+# Dependency directories
+node_modules/
+vendor/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*    # e.g. .env.production
+node_modules

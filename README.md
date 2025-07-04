@@ -1,18 +1,17 @@
 # ThinqScribe Waitlist Application
 
-A modern, full-stack MERN (MongoDB, Express, React, Node.js) waitlist application with TailwindCSS 3, featuring a beautiful blue gradient design inspired by your provided images.
+A production-ready, full-stack MERN (MongoDB, Express, React, Node.js) waitlist application with TailwindCSS 3, featuring a beautiful blue gradient design. Deployed at **thinqscribe.com/waitlist**.
 
 ## 🚀 Features
 
 ### Frontend
 - **Modern React 18** with functional components and hooks
 - **TailwindCSS 3** with custom blue gradient theme
-- **React Router** for navigation
 - **Responsive design** optimized for all devices
 - **Real-time form validation** with error handling
 - **Success/error modal notifications**
-- **Admin dashboard** with filtering, sorting, and pagination
 - **Beautiful animations** with fade-in and slide-up effects
+- **Production optimized** with custom app icon
 
 ### Backend
 - **Node.js & Express** with ES modules
@@ -33,9 +32,14 @@ A modern, full-stack MERN (MongoDB, Express, React, Node.js) waitlist applicatio
 - **isActive**: Boolean, for soft deletes
 - **Timestamps**: createdAt, updatedAt
 
-## 🛠️ Installation & Setup
+## 🚀 Quick Start
 
-### Prerequisites
+### Production Deployment
+The application is deployed at: **https://thinqscribe.com/waitlist**
+
+### Local Development Setup
+
+#### Prerequisites
 - Node.js (v14 or higher)
 - MongoDB (running locally or MongoDB Atlas)
 - npm or yarn
@@ -162,33 +166,39 @@ ThinqSribeWaitlist/
 - `sortBy`: Sort field (createdAt, firstName, lastName, email)
 - `order`: Sort order (asc, desc)
 
-## 📱 Pages & Features
+## 📱 Features
 
-### Homepage (/)
-- Hero section with large "FOR YOU..." text
-- Waitlist signup form
-- Success/error notifications
-- Responsive design
+### Waitlist Form
+- Collects first name, last name, email, and status
+- Real-time validation with error messages
+- Success/error modal notifications
+- Responsive design for all devices
 
-### Admin Dashboard (/admin)
-- Complete waitlist management
-- Search and filter functionality
-- Sorting options
-- Pagination
-- Status statistics
-- Entry removal
+### Status Options
+- Student
+- Educator  
+- Professional
+- Researcher
+- Other
 
 ## 🚀 Deployment
 
-### Backend Deployment
-1. Set up MongoDB Atlas or use your preferred MongoDB hosting
-2. Update environment variables for production
-3. Deploy to Heroku, Railway, or your preferred platform
+### Production Deployment
+The application is deployed on **Render.com** with the following services:
 
-### Frontend Deployment
-1. Build the React app: `npm run build`
-2. Deploy to Netlify, Vercel, or your preferred platform
-3. Update API URL in environment variables
+- **Frontend**: Static site at `thinqscribe.com/waitlist`
+- **Backend**: Web service API
+- **Database**: MongoDB Atlas
+
+### Deployment Guide
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+
+### Environment Variables
+- `NODE_ENV`: production
+- `MONGODB_URI`: Your MongoDB Atlas connection string
+- `JWT_SECRET`: Secure JWT secret for production
+- `CORS_ORIGIN`: https://thinqscribe.com
+- `REACT_APP_API_URL`: Backend API URL
 
 ## 🤝 Contributing
 

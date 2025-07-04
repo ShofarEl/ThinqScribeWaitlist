@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Use local development URL for now, will be overridden in production
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // Create axios instance with default config
@@ -15,6 +16,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     console.log(`Making ${config.method?.toUpperCase()} request to ${config.url}`);
+    console.log('Full URL:', `${config.baseURL}${config.url}`);
     return config;
   },
   (error) => {
@@ -26,15 +28,31 @@ api.interceptors.request.use(
 // Response interceptor
 api.interceptors.response.use(
   (response) => {
+    console.log('Response received:', response.status, response.data);
     return response;
   },
   (error) => {
     console.error('Response error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        baseURL: error.config?.baseURL
+      }
+    });
     
     if (error.response?.status === 404) {
-      console.error('Endpoint not found');
+      console.error('Endpoint not found - check if backend is running');
     } else if (error.response?.status >= 500) {
-      console.error('Server error');
+      console.error('Server error - check backend logs');
+    } else if (error.code === 'ECONNREFUSED') {
+      console.error('Connection refused - backend server not running');
+    } else if (error.code === 'NETWORK_ERROR') {
+      console.error('Network error - check internet connection');
     }
     
     return Promise.reject(error);
@@ -46,14 +64,22 @@ export const waitlistAPI = {
   // Add new entry to waitlist
   addEntry: async (entryData) => {
     try {
+      console.log('Submitting waitlist entry:', entryData);
       const response = await api.post('/waitlist', entryData);
       return response.data;
     } catch (error) {
-      throw error.response?.data || error;
+      console.error('Error adding to waitlist:', error);
+      if (error.response?.data) {
+        throw error.response.data;
+      } else if (error.message) {
+        throw { message: error.message };
+      } else {
+        throw { message: 'Unknown error occurred' };
+      }
     }
   },
 
-  // Get all waitlist entries
+  // Get all waitlist entries (removed for production)
   getEntries: async (params = {}) => {
     try {
       const response = await api.get('/waitlist', { params });
@@ -63,7 +89,7 @@ export const waitlistAPI = {
     }
   },
 
-  // Get single entry by ID
+  // Get single entry by ID (removed for production)
   getEntry: async (id) => {
     try {
       const response = await api.get(`/waitlist/${id}`);
@@ -73,7 +99,7 @@ export const waitlistAPI = {
     }
   },
 
-  // Update entry
+  // Update entry (removed for production)
   updateEntry: async (id, entryData) => {
     try {
       const response = await api.put(`/waitlist/${id}`, entryData);
@@ -83,7 +109,7 @@ export const waitlistAPI = {
     }
   },
 
-  // Delete entry
+  // Delete entry (removed for production)
   deleteEntry: async (id) => {
     try {
       const response = await api.delete(`/waitlist/${id}`);
@@ -93,7 +119,7 @@ export const waitlistAPI = {
     }
   },
 
-  // Get statistics
+  // Get statistics (removed for production)
   getStats: async () => {
     try {
       const response = await api.get('/waitlist/stats/overview');
