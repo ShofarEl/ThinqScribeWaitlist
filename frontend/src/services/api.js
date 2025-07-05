@@ -140,10 +140,23 @@ export const waitlistAPI = {
   // Health check
   healthCheck: async () => {
     try {
+      // Log the full URL being used for health check
+      console.log('Checking API health at:', `${API_BASE_URL}/health`);
+      
       const response = await api.get('/health');
+      console.log('Health check response:', response.data);
       return response.data;
     } catch (error) {
-      throw error.response?.data || error;
+      console.error('Health check failed:', error.message);
+      
+      // Add more detailed error information
+      if (error.code === 'ERR_NETWORK') {
+        console.error('Network error: Backend server may not be running or accessible');
+      } else if (error.response?.status === 404) {
+        console.error('Health endpoint not found: Check API routes configuration');
+      }
+      
+      throw error;
     }
   }
 };

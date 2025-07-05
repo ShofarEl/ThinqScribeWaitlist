@@ -11,6 +11,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [apiStatus, setApiStatus] = useState('checking');
+  const [apiErrorDetails, setApiErrorDetails] = useState('');
 
   const statusOptions = [
     { value: 'student', label: 'Student' },
@@ -24,11 +25,23 @@ const WaitlistForm = ({ onSuccess, onError }) => {
   useEffect(() => {
     const testConnection = async () => {
       try {
+        console.log('Testing backend connection...');
         await waitlistAPI.healthCheck();
+        console.log('Backend connection successful');
         setApiStatus('connected');
+        setApiErrorDetails('');
       } catch (error) {
         console.error('API connection test failed:', error);
         setApiStatus('disconnected');
+        
+        // Provide more detailed error information
+        if (error.code === 'ERR_NETWORK') {
+          setApiErrorDetails('Network error: The backend server may not be running or accessible.');
+        } else if (error.response?.status === 404) {
+          setApiErrorDetails('Endpoint not found: The health check endpoint is not available.');
+        } else {
+          setApiErrorDetails(`Error: ${error.message}`);
+        }
       }
     };
     
@@ -151,7 +164,22 @@ const WaitlistForm = ({ onSuccess, onError }) => {
           
           {apiStatus === 'disconnected' && (
             <div className="mt-2 text-xs sm:text-sm text-red-600 bg-red-50 p-2 rounded">
-              ⚠️ Backend server not available. Form will not work.
+              <div>⚠️ Backend server not available. Form will not work.</div>
+              {apiErrorDetails && (
+                <div className="mt-1 text-xs text-gray-700">{apiErrorDetails}</div>
+              )}
+              <button
+                onClick={() => setApiStatus('checking')}
+                className="mt-2 text-xs bg-red-100 hover:bg-red-200 text-red-800 py-1 px-2 rounded transition-colors"
+              >
+                Retry Connection
+              </button>
+            </div>
+          )}
+          
+          {apiStatus === 'connected' && (
+            <div className="mt-2 text-xs sm:text-sm text-green-600 bg-green-50 p-2 rounded">
+              ✅ Connected to backend server
             </div>
           )}
         </div>
