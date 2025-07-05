@@ -11,7 +11,7 @@ app.use(cors({
   origin: [
     config.CORS_ORIGIN,
     'https://thinqscribe.com',
-    'https://thinqscribe.com/waitlist',
+    'https://www.thinqscribe.com',
     'https://thinqscribe.vercel.app',
     /\.thinqscribe\.vercel\.app$/,
     'http://localhost:3000',
