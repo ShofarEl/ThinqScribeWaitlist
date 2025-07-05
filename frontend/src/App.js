@@ -1,5 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WaitlistForm from './components/WaitlistForm';
+
+// Typing effect component
+const TypedText = ({ text, delay = 100, className }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(prev => prev + text[currentIndex]);
+        setCurrentIndex(currentIndex + 1);
+      }, delay);
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, delay, text]);
+
+  return <span className={className}>{displayedText}<span className="animate-pulse">|</span></span>;
+};
 
 // Success message component
 const SuccessMessage = ({ message, onClose }) => (
@@ -72,6 +91,17 @@ function App() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState('');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Handle window resize for mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSuccess = (response) => {
     setMessage(`Thank you for joining our waitlist! We'll keep you updated on ThinqScribe's launch.`);
@@ -92,16 +122,28 @@ function App() {
           {/* Left side - Hero content */}
           <div className="text-center lg:text-left">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-display-xl font-display text-white mb-4 sm:mb-6 animate-fade-in">
-              FOR<br />
-              YOU<span className="text-2xl sm:text-4xl">...</span>
+              {isMobile ? (
+                <TypedText text="Secure Your Spot Now" className="inline-block" />
+              ) : (
+                <>
+                  FOR<br />
+                  YOU<span className="text-2xl sm:text-4xl">...</span>
+                </>
+              )}
             </h1>
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white mb-4 sm:mb-8 animate-fade-in">
-              ThinqScribe Is For You If...
-            </h2>
+            {!isMobile && (
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white mb-4 sm:mb-8 animate-fade-in">
+                ThinqScribe Is For You If...
+              </h2>
+            )}
             <div className="space-y-3 sm:space-y-4 text-sm sm:text-base md:text-lg text-white opacity-90 animate-slide-up">
-              <p>You are an undergraduate or postgraduate student who loves to produce confident and quality academic work</p>
-              <p>You want to streamline your research and writing process</p>
-              <p>You need AI-powered assistance for academic excellence</p>
+              {!isMobile && (
+                <>
+                  <p>You are an undergraduate or postgraduate student who loves to produce confident and quality academic work</p>
+                  <p>You want to streamline your research and writing process</p>
+                  <p>You need AI-powered assistance for academic excellence</p>
+                </>
+              )}
             </div>
           </div>
 

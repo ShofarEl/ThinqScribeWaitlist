@@ -10,8 +10,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const [apiStatus, setApiStatus] = useState('checking');
-  const [apiErrorDetails, setApiErrorDetails] = useState('');
+  const [apiStatus, setApiStatus] = useState('connected'); // Default to connected for better UX
 
   const statusOptions = [
     { value: 'student', label: 'Student' },
@@ -21,27 +20,15 @@ const WaitlistForm = ({ onSuccess, onError }) => {
     { value: 'other', label: 'Other' }
   ];
 
-  // Test API connection on component mount
+  // Test API connection on component mount (silently)
   useEffect(() => {
     const testConnection = async () => {
       try {
-        console.log('Testing backend connection...');
         await waitlistAPI.healthCheck();
-        console.log('Backend connection successful');
         setApiStatus('connected');
-        setApiErrorDetails('');
       } catch (error) {
         console.error('API connection test failed:', error);
         setApiStatus('disconnected');
-        
-        // Provide more detailed error information
-        if (error.code === 'ERR_NETWORK') {
-          setApiErrorDetails('Network error: The backend server may not be running or accessible.');
-        } else if (error.response?.status === 404) {
-          setApiErrorDetails('Endpoint not found: The health check endpoint is not available.');
-        } else {
-          setApiErrorDetails(`Error: ${error.message}`);
-        }
       }
     };
     
@@ -101,7 +88,7 @@ const WaitlistForm = ({ onSuccess, onError }) => {
     }
 
     if (apiStatus === 'disconnected') {
-      onError('Backend server is not available. Please try again later.');
+      onError('Unable to process your request. Please try again later.');
       return;
     }
 
@@ -143,48 +130,17 @@ const WaitlistForm = ({ onSuccess, onError }) => {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="card shadow-lg border border-thinq-blue-200 animate-slide-up">
+      <div className="card shadow-lg border border-thinq-blue-200 animate-slide-up hover:shadow-xl transition-all duration-300">
         <div className="text-center mb-5">
           <h2 className="text-xl sm:text-2xl font-bold text-thinq-blue-600 mb-2">
             Join the Waitlist
           </h2>
-          <p className="text-sm sm:text-base text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600 mb-4">
             Be the first to experience ThinqScribe when we launch
           </p>
-          
-          {/* API Status Indicator */}
-          {apiStatus === 'checking' && (
-            <div className="mt-2 text-xs sm:text-sm text-thinq-blue-500">
-              <div className="inline-flex items-center">
-                <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-thinq-blue-500 mr-2"></div>
-                Checking connection...
-              </div>
-            </div>
-          )}
-          
-          {apiStatus === 'disconnected' && (
-            <div className="mt-2 text-xs sm:text-sm text-red-600 bg-red-50 p-2 rounded">
-              <div>⚠️ Backend server not available. Form will not work.</div>
-              {apiErrorDetails && (
-                <div className="mt-1 text-xs text-gray-700">{apiErrorDetails}</div>
-              )}
-              <button
-                onClick={() => setApiStatus('checking')}
-                className="mt-2 text-xs bg-red-100 hover:bg-red-200 text-red-800 py-1 px-2 rounded transition-colors"
-              >
-                Retry Connection
-              </button>
-            </div>
-          )}
-          
-          {apiStatus === 'connected' && (
-            <div className="mt-2 text-xs sm:text-sm text-green-600 bg-green-50 p-2 rounded">
-              ✅ Connected to backend server
-            </div>
-          )}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="firstName" className="label text-xs sm:text-sm">
               First Name
@@ -195,9 +151,9 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               name="firstName"
               value={formData.firstName}
               onChange={handleInputChange}
-              className={`input-field text-sm ${errors.firstName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
+              className={`input-field text-sm ${errors.firstName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'focus:border-thinq-blue-500 focus:ring-thinq-blue-200'}`}
               placeholder="Enter your first name"
-              disabled={loading || apiStatus === 'disconnected'}
+              disabled={loading}
             />
             {errors.firstName && (
               <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.firstName}</p>
@@ -214,9 +170,9 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
-              className={`input-field text-sm ${errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
+              className={`input-field text-sm ${errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'focus:border-thinq-blue-500 focus:ring-thinq-blue-200'}`}
               placeholder="Enter your last name"
-              disabled={loading || apiStatus === 'disconnected'}
+              disabled={loading}
             />
             {errors.lastName && (
               <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.lastName}</p>
@@ -233,9 +189,9 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className={`input-field text-sm ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
+              className={`input-field text-sm ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'focus:border-thinq-blue-500 focus:ring-thinq-blue-200'}`}
               placeholder="Enter your email address"
-              disabled={loading || apiStatus === 'disconnected'}
+              disabled={loading}
             />
             {errors.email && (
               <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.email}</p>
@@ -251,8 +207,8 @@ const WaitlistForm = ({ onSuccess, onError }) => {
               name="status"
               value={formData.status}
               onChange={handleInputChange}
-              className={`input-field text-sm ${errors.status ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : ''}`}
-              disabled={loading || apiStatus === 'disconnected'}
+              className={`input-field text-sm ${errors.status ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'focus:border-thinq-blue-500 focus:ring-thinq-blue-200'}`}
+              disabled={loading}
             >
               {statusOptions.map(option => (
                 <option key={option.value} value={option.value}>
@@ -267,26 +223,19 @@ const WaitlistForm = ({ onSuccess, onError }) => {
 
           <button
             type="submit"
-            disabled={loading || apiStatus === 'disconnected'}
-            className={`w-full btn-primary text-sm sm:text-base py-2 sm:py-3 ${(loading || apiStatus === 'disconnected') ? 'opacity-75 cursor-not-allowed' : ''}`}
+            disabled={loading}
+            className={`w-full btn-primary text-sm sm:text-base py-3 mt-2 transform transition-all duration-200 ${loading ? 'opacity-75 cursor-not-allowed' : 'hover:-translate-y-1'}`}
           >
             {loading ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white mr-2"></div>
-                <span className="text-sm">Joining Waitlist...</span>
+                <span className="text-sm">Processing...</span>
               </div>
             ) : (
-              'Join Waitlist'
+              'Secure Your Spot'
             )}
           </button>
         </form>
-
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-500 text-center">
-            By joining our waitlist, you'll be among the first to know when ThinqScribe launches.
-            We respect your privacy and won't spam you.
-          </p>
-        </div>
       </div>
     </div>
   );
